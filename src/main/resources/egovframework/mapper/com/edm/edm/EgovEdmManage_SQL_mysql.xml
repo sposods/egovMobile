@@ -4,51 +4,63 @@
 <mapper namespace="EdmManageDAO">
 
 	<resultMap id="EdmManage" type="egovframework.com.edm.edm.service.EdmManageVO">
-		<result property="expenseId" 				column="CNSLT_ID"/>
+		<result property="expenseId" 				column="EXPENSE_ID"/>
+		<result property="mberId" 					column="MBER_ID"/>
+		<result property="categoryId" 				column="CATEGORY_ID"/>
+		<result property="amount" 					column="AMOUNT"/>
+		<result property="expenseNote" 				column="EXPENSE_NOTE"/>
+		<result property="expenseDt" 				column="EXPENSE_DT"/>
+		<result property="expenseTm" 				column="EXPENSE_TM"/>
+		<result property="creatDt" 					column="CREAT_DT"/>
+		<result property="updtDt" 					column="UPDT_DT"/>
+		<result property="categoryId" 				column="CATEGORY_ID"/>
+		<result property="categoryNm" 				column="CATEGORY_NM"/>
+		<result property="mberNm" 					column="MBER_NM"/>
+		<result property="offmTelno" 				column="OFFM_TELNO"/>
+		<result property="aemailAdres" 				column="AEMAIL_ADRES"/>
+		<result property="orgnztNm" 				column="ORGNZT_NM"/>
 	</resultMap>
 
 	<select id="selectEdmListDetail" resultMap="EdmManage">
 		<![CDATA[
-			SELECT 	C.CNSLT_ID, C.CNSLT_SJ, C.CNSLT_CN, C.OTHBC_AT, C.WRITNG_PASSWORD,
-					C.AREA_NO, C.MIDDLE_TELNO, C.END_TELNO, C.FRST_MBTLNUM, C.MIDDLE_MBTLNUM, C.END_MBTLNUM,
-					C.EMAIL_ADRES, C.EMAIL_ANSWER_AT,
-					C.MBER_NM , C.WRITNG_DE, C.RDCNT,
-					C.CATEGORY_ID, D.CODE_NM CATEGORY_ID_NM,
-					C.MANAGT_CN,C.MANAGT_DE , C.ATCH_FILE_ID,
-					A.USER_NM, A.OFFM_TELNO, A.EMAIL_ADRES AEMAIL_ADRES, B.ORGNZT_NM ,
-					DATE_FORMAT(C.FRST_REGIST_PNTTM,'YYYY-MM-DD') FRST_REGIST_PNTTM   , C.FRST_REGISTER_ID,
-					DATE_FORMAT(C.LAST_UPDT_PNTTM,'YYYY-MM-DD')   LAST_UPDT_PNTTM	    , C.LAST_UPDUSR_ID
-			FROM 	COMTNEXPENSEMANAGE C
-			LEFT 	OUTER JOIN COMTCCMMNDETAILCODE D ON		D.CODE_ID ='COM028' 		AND C.CATEGORY_ID = D.CODE
-			LEFT 	OUTER JOIN COMTNEMPLYRINFO A     ON		A.ESNTL_ID= C.LAST_UPDUSR_ID
-			LEFT 	OUTER JOIN COMTNORGNZTINFO B     ON		A.ORGNZT_ID = B.ORGNZT_ID
-			WHERE	CNSLT_ID=#{expenseId}
-		]]>
-	</select>
-
-	<select id="selectEdmList" parameterType="egovframework.com.edm.edm.service.EdmManageDefaultVO" resultType="egovMap">
-		<![CDATA[
-			SELECT 	C.EXPENSE_ID, C.MBER_ID, C.CATEGORY_ID, C.EXPENSE_DT, C.EXPENSE_TM,
+			SELECT 	C.EXPENSE_ID, C.MBER_ID, C.CATEGORY_ID, 
 					C.AMOUNT, C.EXPENSE_NOTE,
-					DATE_FORMAT(C.EXPENSE_DT,'%Y-%m-%d') EXPENSE_DT,
-					DATE_FORMAT(C.CREAT_DT,'%Y-%m-%d'),
-					DATE_FORMAT(C.UPDT_DT,'%Y-%m-%d'),
+					DATE_FORMAT(C.EXPENSE_DT,'%Y-%m-%d') EXPENSE_DT, EXPENSE_TM,
+					DATE_FORMAT(C.CREAT_DT,'%Y-%m-%d') CREAT_DT,
+					DATE_FORMAT(C.UPDT_DT,'%Y-%m-%d') UPDT_DT,
 					C.CATEGORY_ID, D.CODE_NM CATEGORY_NM,
 					A.USER_NM AS MBER_NM, A.OFFM_TELNO, A.EMAIL_ADRES AEMAIL_ADRES, B.ORGNZT_NM 
 			FROM 	COMTNEXPENSEMANAGE C
 			LEFT 	OUTER JOIN COMTCCMMNDETAILCODE D ON		D.CODE_ID ='COM087' 		AND C.CATEGORY_ID = D.CODE
 			LEFT 	OUTER JOIN COMTNEMPLYRINFO A     ON		A.ESNTL_ID= C.MBER_ID
 			LEFT 	OUTER JOIN COMTNORGNZTINFO B     ON		A.ORGNZT_ID = B.ORGNZT_ID
-			WHERE	1=1
+			WHERE	EXPENSE_ID=#{expenseId}
 		]]>
-			<if test="searchCondition == 'mberNm'">
-				AND MBER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
-			</if>
+	</select>
+
+	<select id="selectEdmList" parameterType="egovframework.com.edm.edm.service.EdmManageDefaultVO" resultType="egovMap">
+		<![CDATA[
+			SELECT 	C.EXPENSE_ID, C.MBER_ID, C.CATEGORY_ID, 
+					C.AMOUNT, C.EXPENSE_NOTE,
+					DATE_FORMAT(C.EXPENSE_DT,'%Y-%m-%d') EXPENSE_DT, EXPENSE_TM,
+					DATE_FORMAT(C.CREAT_DT,'%Y-%m-%d') CREAT_DT,
+					DATE_FORMAT(C.UPDT_DT,'%Y-%m-%d') UPDT_DT,
+					C.CATEGORY_ID, D.CODE_NM CATEGORY_NM,
+					A.USER_NM AS MBER_NM, A.OFFM_TELNO, A.EMAIL_ADRES AEMAIL_ADRES, B.ORGNZT_NM 
+			FROM 	COMTNEXPENSEMANAGE C
+			LEFT 	OUTER JOIN COMTCCMMNDETAILCODE D ON		D.CODE_ID ='COM087' 		AND C.CATEGORY_ID = D.CODE
+			LEFT 	OUTER JOIN COMTNEMPLYRINFO A     ON		A.ESNTL_ID= C.MBER_ID
+			LEFT 	OUTER JOIN COMTNORGNZTINFO B     ON		A.ORGNZT_ID = B.ORGNZT_ID
+			WHERE 	C.MBER_ID = #{uniqId}
+		]]>
 			<if test="searchCondition == 'categoryNm'">
-				AND CODE_NM LIKE CONCAT('%', #{categoryNm}, '%')
+				AND D.CODE_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			<if test="searchCondition == 'expenseNote'">
+				AND C.EXPENSE_NOTE LIKE CONCAT('%', #{searchKeyword}, '%')
 			</if>
 		<![CDATA[
-			ORDER BY CODE_NM DESC
+			ORDER BY D.CODE_NM DESC
 			LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
 		]]>
 	</select>
@@ -56,14 +68,17 @@
 	<select id="selectEdmListTotCnt" parameterType="egovframework.com.edm.edm.service.EdmManageDefaultVO" resultType="int">
 		<![CDATA[
 			SELECT 	COUNT(*) totcnt
-			FROM 	COMTNEXPENSEMANAGE
-			WHERE 	1=1
+			FROM 	COMTNEXPENSEMANAGE C
+			LEFT 	OUTER JOIN COMTCCMMNDETAILCODE D ON		D.CODE_ID ='COM087' 		AND C.CATEGORY_ID = D.CODE
+			LEFT 	OUTER JOIN COMTNEMPLYRINFO A     ON		A.ESNTL_ID= C.MBER_ID
+			LEFT 	OUTER JOIN COMTNORGNZTINFO B     ON		A.ORGNZT_ID = B.ORGNZT_ID
+			WHERE 	C.MBER_ID = #{uniqId}
 		]]>
-			<if test="searchCondition == 'wrterNm'">
-				AND MBER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+			<if test="searchCondition == 'categoryNm'">
+				AND D.CODE_NM LIKE CONCAT('%', #{searchKeyword}, '%')
 			</if>
-			<if test="searchCondition == 'cnsltSj'">
-				AND CNSLT_SJ LIKE CONCAT('%', #{searchKeyword}, '%')
+			<if test="searchCondition == 'expenseNote'">
+				AND C.EXPENSE_NOTE LIKE CONCAT('%', #{searchKeyword}, '%')
 			</if>
 	</select>
 

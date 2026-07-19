@@ -134,12 +134,25 @@ public class EgovEdmEdmManageController {
         searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
         searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 
+        // 권한 체크
+        Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+        if(!isAuthenticated) {
+            // return "com/uat/uia/EgovLoginUsr";
+            // modelAndView.setViewName("egovframework/mbl/com/uat/uia/EgovLoginUsr");
+            return "egovframework/mbl/com/uat/uia/EgovLoginUsr";
+        }
+        
+    	// 로그인VO에서  사용자 정보 가져오기
+    	LoginVO	loginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+    	String	uniqId = loginVO.getUniqId();
+		searchVO.setUniqId(uniqId);
+    	
         List<?> edmManageList = edmManageService.selectEdmList(searchVO);
 
         model.addAttribute("edmManageList", edmManageList);
         model.addAttribute("listSize", edmManageList.size());
 
-        /** paging */
+        /** paging 처리 */
         int totCnt = edmManageService.selectEdmListTotCnt(searchVO);
 		paginationInfo.setTotalRecordCount(totCnt);
 
@@ -160,14 +173,11 @@ public class EgovEdmEdmManageController {
      * @throws Exception
      */
     @SuppressWarnings("deprecation")
-	@RequestMapping("/uss/olp/cnm/EdmDetailInqire.mdo")
+	@RequestMapping("/edm/edm/EdmDetailInqire.mdo")
     public String	selectEdmListDetail(
     		EdmManageVO edmManageVO,
             @ModelAttribute("searchVO") EdmManageDefaultVO searchVO,
             ModelMap model) throws Exception {
-
-    	// 조회 수 증가
-    	edmManageService.updateEdmInqireCo(edmManageVO);
 
     	EdmManageVO vo = edmManageService.selectEdmListDetail(edmManageVO);
 
@@ -213,7 +223,7 @@ public class EgovEdmEdmManageController {
      * @param searchVO
      * @param edmManageVO
      * @param model
-     * @return "redirect:/uss/olp/cnm/EdmListInqire.mdo"
+     * @return "redirect:/edm/edm/EdmDtlsUpdt.mdo"
      * @throws Exception
      */
     @SuppressWarnings({ "deprecation", "unused" })

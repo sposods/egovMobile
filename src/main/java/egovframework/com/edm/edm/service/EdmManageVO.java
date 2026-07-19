@@ -54,6 +54,15 @@ public class EdmManageVO extends EdmManageDefaultVO {
     
     /** 수정일시 */
     private String updtDt;
+    
+    /** 사무실전화번호 */
+    private String offmTelno;
+    
+    /** 이메일 */
+    private String aemailAdres;
+    
+    /** 조직명 */
+    private String orgnztNm;
 
 	/**
 	 * @return the expenseId
@@ -215,8 +224,48 @@ public class EdmManageVO extends EdmManageDefaultVO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-    
-    
+
+	/**
+	 * @return the offmTelno
+	 */
+	public String getOffmTelno() {
+		return offmTelno;
+	}
+
+	/**
+	 * @param offmTelno the offmTelno to set
+	 */
+	public void setOffmTelno(String offmTelno) {
+		this.offmTelno = offmTelno;
+	}
+
+	/**
+	 * @return the aemailAdres
+	 */
+	public String getAemailAdres() {
+		return aemailAdres;
+	}
+
+	/**
+	 * @param aemailAdres the aemailAdres to set
+	 */
+	public void setAemailAdres(String aemailAdres) {
+		this.aemailAdres = aemailAdres;
+	}
+
+	/**
+	 * @return the orgnztNm
+	 */
+	public String getOrgnztNm() {
+		return orgnztNm;
+	}
+
+	/**
+	 * @param orgnztNm the orgnztNm to set
+	 */
+	public void setOrgnztNm(String orgnztNm) {
+		this.orgnztNm = orgnztNm;
+	}
     
     
 	    

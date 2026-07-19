@@ -46,10 +46,15 @@ public class EdmManageDefaultVO implements Serializable {
 
     /** lastIndex */
     private int lastIndex = 1;
-
+    
     /** recordCountPerPage */
     private int recordCountPerPage = 10;
 
+    /** uniqIde */
+    private String uniqId;
+
+    
+    
 	/**
 	 * searchCondition attribute 를 리턴한다.
 	 * @return the String
@@ -192,6 +197,20 @@ public class EdmManageDefaultVO implements Serializable {
 	 */
 	public void setRecordCountPerPage(int recordCountPerPage) {
 		this.recordCountPerPage = recordCountPerPage;
+	}
+
+	/**
+	 * @return the uniqId
+	 */
+	public String getUniqId() {
+		return uniqId;
+	}
+
+	/**
+	 * @param uniqId the uniqId to set
+	 */
+	public void setUniqId(String uniqId) {
+		this.uniqId = uniqId;
 	}
 
 

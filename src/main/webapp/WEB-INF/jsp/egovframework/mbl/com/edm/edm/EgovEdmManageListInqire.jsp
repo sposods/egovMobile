@@ -47,20 +47,21 @@
 					});
 				}
 				else {
-					document.searchVO.action = "${pageContext.request.contextPath}/uss/olp/cnm/CnsltDetailInqire.mdo?cnsltId=" + cnsltId;						         
+					document.searchVO.action = "${pageContext.request.contextPath}/edm/edm/EdmDetailInqire.mdo?expenseId=" + expenseId;						         
 					document.searchVO.submit();
 				}
 		
 			}
 
 			function showList_page(pageIndex) {
+				debugger;
 
 				if(document.searchVO.pageIndex.value == pageIndex) {
 					return;
 				} 
 
 				document.searchVO.pageIndex.value = pageIndex == 0 ? 1 : pageIndex;
-				document.searchVO.action = "${pageContext.request.contextPath}/edm/emd/EdmListInqire.mdo";					         
+				document.searchVO.action = "${pageContext.request.contextPath}/edm/edm/EgovEdmManageListInqire.mdo";					         
 				document.searchVO.submit();
 			}
 
@@ -69,7 +70,7 @@
 					return;
 				}
 				
-				var url = "${pageContext.request.contextPath}/edm/emd/EdmDtlsRegist.mdo";					         
+				var url = "${pageContext.request.contextPath}/edm/edm/EdmDtlsRegist.mdo";					         
 				$('#detailForm').attr('action', url);
 				$('#detailForm').attr('data-ajax', 'false');
 				$('#detailForm').submit();	
@@ -90,7 +91,7 @@
 			<div data-role="header">
 				<a href="${pageContext.request.contextPath}/index.jsp" data-icon="home" rel="external">홈</a>
 			    <h1>지출 목록조회</h1>
-			    <a href="${pageContext.request.contextPath}/edm/emd/EdmDtlsRegistView.mdo" data-icon="plus">등록</a>
+			    <a href="${pageContext.request.contextPath}/edm/edm/EdmDtlsRegistView.mdo" data-icon="plus">등록</a>
 			</div>
 			<!-- header end -->
 			
@@ -104,8 +105,8 @@
 						<div class="uss-Search">
 							<input type="hidden" id="pageIndex" name="pageIndex" value="${searchVO.pageIndex }"/>
 			                <select id="searchCondition" name="searchCondition" data-role="none">
-			               		<option value="wrterNm" <c:if test='${searchVO.searchCondition == "wrterNm"}'>selected="selected"</c:if>>지출구분</option>
-			                	<option value="cnsltSj" <c:if test='${searchVO.searchCondition == "cnsltSj"}'>selected="selected"</c:if>>지출내용</option>
+			                	<option value="categoryNm" <c:if test='${searchVO.searchCondition == "categoryNm"}'>selected="selected"</c:if>>지출구분</option>
+			               		<option value="expenseNote" <c:if test='${searchVO.searchCondition == "expenseNote"}'>selected="selected"</c:if>>지출내용</option>
 			               	</select>
 			               	<div class="uss-SearchBox">
 				                <input type="text" name="searchKeyword" id="searchKeyword" class="type-text" value="${searchVO.searchKeyword }" data-role="none"/>
