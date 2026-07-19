@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="EdmManageDAO">
+
+	<resultMap id="EdmManage" type="egovframework.com.edm.edm.service.EdmManageVO">
+		<result property="expenseId" 				column="CNSLT_ID"/>
+	</resultMap>
+
+	<select id="selectEdmListDetail" resultMap="EdmManage">
+		<![CDATA[
+			SELECT 	C.CNSLT_ID, C.CNSLT_SJ, C.CNSLT_CN, C.OTHBC_AT, C.WRITNG_PASSWORD,
+					C.AREA_NO, C.MIDDLE_TELNO, C.END_TELNO, C.FRST_MBTLNUM, C.MIDDLE_MBTLNUM, C.END_MBTLNUM,
+					C.EMAIL_ADRES, C.EMAIL_ANSWER_AT,
+					C.MBER_NM , C.WRITNG_DE, C.RDCNT,
+					C.CATEGORY_ID, D.CODE_NM CATEGORY_ID_NM,
+					C.MANAGT_CN,C.MANAGT_DE , C.ATCH_FILE_ID,
+					A.USER_NM, A.OFFM_TELNO, A.EMAIL_ADRES AEMAIL_ADRES, B.ORGNZT_NM ,
+					DATE_FORMAT(C.FRST_REGIST_PNTTM,'YYYY-MM-DD') FRST_REGIST_PNTTM   , C.FRST_REGISTER_ID,
+					DATE_FORMAT(C.LAST_UPDT_PNTTM,'YYYY-MM-DD')   LAST_UPDT_PNTTM	    , C.LAST_UPDUSR_ID
+			FROM 	COMTNEXPENSEMANAGE C
+			LEFT 	OUTER JOIN COMTCCMMNDETAILCODE D ON		D.CODE_ID ='COM028' 		AND C.CATEGORY_ID = D.CODE
+			LEFT 	OUTER JOIN COMTNEMPLYRINFO A     ON		A.ESNTL_ID= C.LAST_UPDUSR_ID
+			LEFT 	OUTER JOIN COMTNORGNZTINFO B     ON		A.ORGNZT_ID = B.ORGNZT_ID
+			WHERE	CNSLT_ID=#{expenseId}
+		]]>
+	</select>
+
+	<select id="selectEdmList" parameterType="egovframework.com.edm.edm.service.EdmManageDefaultVO" resultType="egovMap">
+		<![CDATA[
+			SELECT 	C.EXPENSE_ID, C.MBER_ID, C.CATEGORY_ID, C.EXPENSE_DT, C.EXPENSE_TM,
+					C.AMOUNT, C.EXPENSE_NOTE,
+					DATE_FORMAT(C.EXPENSE_DT,'%Y-%m-%d') EXPENSE_DT,
+					DATE_FORMAT(C.CREAT_DT,'%Y-%m-%d'),
+					DATE_FORMAT(C.UPDT_DT,'%Y-%m-%d'),
+					C.CATEGORY_ID, D.CODE_NM CATEGORY_NM,
+					A.USER_NM AS MBER_NM, A.OFFM_TELNO, A.EMAIL_ADRES AEMAIL_ADRES, B.ORGNZT_NM 
+			FROM 	COMTNEXPENSEMANAGE C
+			LEFT 	OUTER JOIN COMTCCMMNDETAILCODE D ON		D.CODE_ID ='COM087' 		AND C.CATEGORY_ID = D.CODE
+			LEFT 	OUTER JOIN COMTNEMPLYRINFO A     ON		A.ESNTL_ID= C.MBER_ID
+			LEFT 	OUTER JOIN COMTNORGNZTINFO B     ON		A.ORGNZT_ID = B.ORGNZT_ID
+			WHERE	1=1
+		]]>
+			<if test="searchCondition == 'mberNm'">
+				AND MBER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			<if test="searchCondition == 'categoryNm'">
+				AND CODE_NM LIKE CONCAT('%', #{categoryNm}, '%')
+			</if>
+		<![CDATA[
+			ORDER BY CODE_NM DESC
+			LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+		]]>
+	</select>
+
+	<select id="selectEdmListTotCnt" parameterType="egovframework.com.edm.edm.service.EdmManageDefaultVO" resultType="int">
+		<![CDATA[
+			SELECT 	COUNT(*) totcnt
+			FROM 	COMTNEXPENSEMANAGE
+			WHERE 	1=1
+		]]>
+			<if test="searchCondition == 'wrterNm'">
+				AND MBER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			<if test="searchCondition == 'cnsltSj'">
+				AND CNSLT_SJ LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+	</select>
+
+	<insert id="insertEdmDtls">
+		<![CDATA[
+			INSERT INTO COMTNEXPENSEMANAGE
+				   (CNSLT_ID
+				  , CNSLT_SJ
+				  , CNSLT_CN
+				  , OTHBC_AT
+				  , WRITNG_PASSWORD
+				  , AREA_NO
+				  , MIDDLE_TELNO
+				  , END_TELNO
+				  , FRST_MBTLNUM
+				  , MIDDLE_MBTLNUM
+				  , END_MBTLNUM
+				  , EMAIL_ADRES
+				  , EMAIL_ANSWER_AT
+				  , MBER_NM
+				  , WRITNG_DE
+				  , RDCNT
+				  , CATEGORY_ID
+				  , ATCH_FILE_ID
+				  , FRST_REGIST_PNTTM
+				  , FRST_REGISTER_ID)
+			VALUES ( #{expenseId}
+				  , #{cnsltSj}
+				  , #{cnsltCn}
+				  , #{othbcAt}
+				  , #{writngPassword}
+				  , #{areaNo}
+				  , #{middleTelno}
+				  , #{endTelno}
+				  , #{firstMoblphonNo}
+				  , #{middleMbtlnum}
+				  , #{endMbtlnum}
+				  , #{emailAdres}
+				  , #{emailAnswerAt}
+				  , #{wrterNm}
+				  , DATE_FORMAT(SYSDATE(), 'YYYYMMDD')
+				  , 0
+				  , '1'
+				  , #{atchFileId}
+				  , SYSDATE()
+				  , #{frstRegisterId})
+		]]>
+	</insert>
+
+	<update id="updateEdmInqireCo">
+		<![CDATA[
+			UPDATE	COMTNEXPENSEMANAGE	SET
+				    RDCNT= IFNULL(RDCNT,0) + 1
+ 			WHERE   CNSLT_ID=#{expenseId}
+		]]>
+	</update>
+
+	<select id="selectEdmPasswordConfirmCnt" resultType="int">
+		<![CDATA[
+			SELECT 	COUNT(*) totcnt
+			FROM 	COMTNEXPENSEMANAGE
+			WHERE	CNSLT_ID=#{expenseId}
+			AND		WRITNG_PASSWORD=#{writngPassword}
+		]]>
+	</select>
+
+	<update id="updateEdmDtls">
+		<![CDATA[
+			UPDATE	COMTNEXPENSEMANAGE	SET
+				    CNSLT_SJ=#{cnsltSj}
+				  , CNSLT_CN=#{cnsltCn}
+				  , OTHBC_AT=#{othbcAt}
+				  , WRITNG_PASSWORD=#{writngPassword}
+				  , AREA_NO=#{areaNo}
+				  , MIDDLE_TELNO=#{middleTelno}
+				  , END_TELNO=#{endTelno}
+				  , FRST_MBTLNUM=#{firstMoblphonNo}
+				  , MIDDLE_MBTLNUM=#{middleMbtlnum}
+				  , END_MBTLNUM=#{endMbtlnum}
+				  , EMAIL_ADRES=#{emailAdres}
+				  , EMAIL_ANSWER_AT=IFNULL(#{emailAnswerAt},'N')
+				  , MBER_NM=#{wrterNm}
+				  , WRITNG_DE=DATE_FORMAT(SYSDATE(), 'YYYYMMDD')
+				  , MANAGT_CN=#{managtCn}
+				  , MANAGT_DE=#{managtDe}
+				  , ATCH_FILE_ID=#{atchFileId}
+				  , FRST_REGIST_PNTTM=SYSDATE()
+				  , FRST_REGISTER_ID=#{frstRegisterId}
+			WHERE  CNSLT_ID=#{expenseId}
+		]]>
+	</update>
+
+	<delete id="deleteEdmDtls">
+		<![CDATA[
+			DELETE FROM COMTNEXPENSEMANAGE
+			WHERE  CNSLT_ID=#{expenseId}
+		]]>
+	</delete>
+
+	<select id="selectEdmAnswerDetail" resultMap="EdmManage">
+		<![CDATA[
+			SELECT 	C.CNSLT_ID, C.CNSLT_SJ, C.CNSLT_CN, C.OTHBC_AT, C.WRITNG_PASSWORD,
+					C.AREA_NO, C.MIDDLE_TELNO, C.END_TELNO, C.FRST_MBTLNUM, C.MIDDLE_MBTLNUM, C.END_MBTLNUM,
+					C.EMAIL_ADRES, C.EMAIL_ANSWER_AT,
+					C.MBER_NM , C.WRITNG_DE, C.RDCNT,
+					C.CATEGORY_ID, D.CODE_NM CATEGORY_ID_NM,
+					C.MANAGT_CN, C.MANAGT_DE, C.ATCH_FILE_ID,
+					A.USER_NM, A.OFFM_TELNO, A.EMAIL_ADRES AEMAIL_ADRES, B.ORGNZT_NM ,
+					DATE_FORMAT(C.FRST_REGIST_PNTTM,'YYYY-MM-DD') FRST_REGIST_PNTTM   , C.FRST_REGISTER_ID,
+					DATE_FORMAT(C.LAST_UPDT_PNTTM,'YYYY-MM-DD')   LAST_UPDT_PNTTM	    , C.LAST_UPDUSR_ID
+			FROM 	COMTNEXPENSEMANAGE C
+			LEFT 	OUTER JOIN COMTCCMMNDETAILCODE D ON		D.CODE_ID ='COM028' 		AND C.CATEGORY_ID = D.CODE
+			LEFT 	OUTER JOIN COMTNEMPLYRINFO A     ON		A.ESNTL_ID= C.LAST_UPDUSR_ID
+			LEFT 	OUTER JOIN COMTNORGNZTINFO B     ON		A.ORGNZT_ID = B.ORGNZT_ID
+			WHERE	CNSLT_ID=#{expenseId}
+		]]>
+	</select>
+
+	<select id="selectEdmAnswerList" parameterType="egovframework.com.edm.edm.service.EdmManageDefaultVO" resultType="egovMap">
+	<![CDATA[
+			SELECT CNSLT_ID, CNSLT_SJ, CNSLT_CN, OTHBC_AT, WRITNG_PASSWORD,
+				   AREA_NO, MIDDLE_TELNO, END_TELNO, FRST_MBTLNUM, MIDDLE_MBTLNUM, END_MBTLNUM,
+				   EMAIL_ADRES, EMAIL_ANSWER_AT, MBER_NM , WRITNG_DE,
+				   RDCNT  INQIRE_CO,
+				   CATEGORY_ID, CATEGORY_ID_NM, MANAGT_CN, MANAGT_DE, ATCH_FILE_ID,
+				   USER_NM, OFFM_TELNO, EMAIL_ADRES AEMAIL_ADRES, ORGNZT_NM ,
+				   FRST_REGIST_PNTTM	, FRST_REGISTER_ID,
+				   LAST_UPDT_PNTTM	    , LAST_UPDUSR_ID
+			FROM
+				   (
+				   SELECT  ROWNUM RNUM,CNS.*
+				   FROM
+				   	   	  (
+				   		   SELECT 	C.CNSLT_ID, C.CNSLT_SJ, C.CNSLT_CN, C.OTHBC_AT, C.WRITNG_PASSWORD,
+						   			C.AREA_NO, C.MIDDLE_TELNO, C.END_TELNO, C.FRST_MBTLNUM, C.MIDDLE_MBTLNUM, C.END_MBTLNUM,
+									C.EMAIL_ADRES, C.EMAIL_ANSWER_AT, C.MBER_NM , C.WRITNG_DE,
+									C.RDCNT,
+									C.CATEGORY_ID, D.CODE_NM CATEGORY_ID_NM, C.MANAGT_CN, C.MANAGT_DE, C.ATCH_FILE_ID,
+									A.USER_NM, A.OFFM_TELNO, A.EMAIL_ADRES AEMAIL_ADRES, B.ORGNZT_NM ,
+									C.FRST_REGIST_PNTTM	, C.FRST_REGISTER_ID,
+									C.LAST_UPDT_PNTTM	    , C.LAST_UPDUSR_ID
+						   FROM 	COMTNEXPENSEMANAGE C
+						   LEFT 	OUTER JOIN COMTCCMMNDETAILCODE D ON		D.CODE_ID ='COM028' 		AND C.CATEGORY_ID = D.CODE
+						   LEFT 	OUTER JOIN COMTNEMPLYRINFO A     ON		A.ESNTL_ID= C.LAST_UPDUSR_ID
+						   LEFT 	OUTER JOIN COMTNORGNZTINFO B     ON		A.ORGNZT_ID = B.ORGNZT_ID
+						   WHERE	1=1
+		]]>
+			<if test="searchCondition == 'wrterNm'">
+				AND MBER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			<if test="searchCondition == 'qnaProcessSttusCodeNm'">
+				AND CATEGORY_ID_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+		<![CDATA[
+							ORDER BY CNSLT_SJ DESC
+						  ) CNS
+				   )
+			WHERE ROWNUM <= #{recordCountPerPage} and RNUM > #{firstIndex}
+		]]>
+	</select>
+
+	<select id="selectEdmAnswerListTotCnt" parameterType="egovframework.com.edm.edm.service.EdmManageDefaultVO" resultType="int">
+		<![CDATA[
+			SELECT 	COUNT(*) totcnt
+			FROM 	COMTNEXPENSEMANAGE
+			WHERE 	1=1
+		]]>
+			<if test="searchCondition == 'wrterNm'">
+				AND MBER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			<if test="searchCondition == 'qnaProcessSttusCodeNm'">
+				AND CATEGORY_ID_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+	</select>
+
+	<update id="updateEdmDtlsAnswer">
+		<![CDATA[
+			UPDATE	COMTNEXPENSEMANAGE	SET
+				  	CATEGORY_ID=#{qnaProcessSttusCode}
+				  , MANAGT_CN=#{managtCn}
+				  , MANAGT_DE=DATE_FORMAT(SYSDATE(), 'YYYYMMDD')
+				  , LAST_UPDT_PNTTM=SYSDATE()
+				  , LAST_UPDUSR_ID=#{lastUpdusrId}
+			WHERE  CNSLT_ID=#{expenseId}
+		]]>
+	</update>
+
+	<delete id="deleteEdmDtlsAnswer">
+		<![CDATA[
+			DELETE FROM COMTNQAINFO
+			WHERE  CNSLT_ID=#{expenseId}
+		]]>
+	</delete>
+
+
+</mapper>

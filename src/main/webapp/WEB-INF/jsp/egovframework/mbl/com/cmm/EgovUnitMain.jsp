@@ -43,7 +43,7 @@
 			<h3>지출관리</h3>
 				<ul data-role="listview" data-inset="true" data-theme="d">
 					
-					<li><a href="${pageContext.request.contextPath}/edm/edm/selectManagementList.mdo" data-ajax="false">지출관리</a></li>
+					<li><a href="${pageContext.request.contextPath}/edm/edm/EgovEdmManageListInqire.mdo" data-ajax="false">지출관리</a></li>
 					<li><a href="${pageContext.request.contextPath}/edm/eds/selectOverviewList.mdo" rel="external">지출현황</a></li>
 					<li><a href="${pageContext.request.contextPath}/edm/edb/selectAnalysisList.mdo" data-ajax="false">지출분석</a></li>
 				</ul>
