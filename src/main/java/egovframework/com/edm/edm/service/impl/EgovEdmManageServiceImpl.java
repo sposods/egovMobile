@@ -38,8 +38,8 @@ public class EgovEdmManageServiceImpl extends EgovAbstractServiceImpl implements
     private EdmManageDAO EdmManageDAO;
 
 //    /** ID Generation */
-//	@Resource(name="egovEdmManageIdGnrService")
-//	private EgovIdGnrService idgenService;
+	@Resource(name="egovEdmManageIdGnrService")
+	private EgovIdGnrService idgenService;
 
 
     /**
@@ -94,22 +94,12 @@ public class EgovEdmManageServiceImpl extends EgovAbstractServiceImpl implements
 	 */
     @Override
 	public void insertEdmDtls(EdmManageVO vo) throws Exception {
-//    	String	expenseId = idgenService.getNextStringId();
+    	String	expenseId = idgenService.getNextStringId();
 
-//		vo.setExpenseId(expenseId);
+		vo.setExpenseId(expenseId);
 
     	EdmManageDAO.insertEdmDtls(vo);
     }
-
-    /**
-	 * 작성비밀번호를 확인한다.
-	 * @param vo
-	 * @return 글 총 갯수
-	 */
-    @Override
-	public int selectEdmPasswordConfirmCnt(EdmManageVO vo) {
-		return EdmManageDAO.selectEdmPasswordConfirmCnt(vo);
-	}
 
 	/**
 	 * 지출관리 글을 수정한다.
@@ -129,52 +119,6 @@ public class EgovEdmManageServiceImpl extends EgovAbstractServiceImpl implements
     @Override
 	public void deleteEdmDtls(EdmManageVO vo) throws Exception {
     	EdmManageDAO.deleteEdmDtls(vo);
-    }
-
-
-    /**
-	 * 상담답변 글을 조회한다.
-	 * @param vo
-	 * @return 조회한 글
-	 * @exception Exception
-	 */
-    @Override
-	public EdmManageVO selectEdmAnswerListDetail(EdmManageVO vo) throws Exception {
-        EdmManageVO resultVO = EdmManageDAO.selectEdmAnswerListDetail(vo);
-        if (resultVO == null)
-            throw processException("info.nodata.msg");
-        return resultVO;
-    }
-
-    /**
-	 * 상담답변 글 목록을 조회한다.
-	 * @param searchVO
-	 * @return 글 목록
-	 * @exception Exception
-	 */
-    @Override
-	public List<?> selectEdmAnswerList(EdmManageDefaultVO searchVO) throws Exception {
-        return EdmManageDAO.selectEdmAnswerList(searchVO);
-    }
-
-    /**
-	 * 상담답변 글 총 갯수를 조회한다.
-	 * @param searchVO
-	 * @return 글 총 갯수
-	 */
-    @Override
-	public int selectEdmAnswerListTotCnt(EdmManageDefaultVO searchVO) {
-		return EdmManageDAO.selectEdmListTotCnt(searchVO);
-	}
-
-	/**
-	 * 상담답변 글을 수정한다.
-	 * @param vo
-	 * @exception Exception
-	 */
-    @Override
-	public void updateEdmDtlsAnswer(EdmManageVO vo) throws Exception {
-    	EdmManageDAO.updateEdmDtlsAnswer(vo);
     }
 
 }

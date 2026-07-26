@@ -26,6 +26,15 @@
 		<script type="text/javascript" src="${pageContext.request.contextPath}/validator.mdo"></script>
 		<validator:javascript formName="edmManageVO" staticJavascript="false" xhtml="true" cdata="false"/> 
 		
+		<!-- datebox javascript-->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/egovframework/mbl/com/datepicker/jqm-datebox.css"/>
+
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/egovframework/mbl/com/datepicker/jqm-datebox.core.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/egovframework/mbl/com/datepicker/jqm-datebox.mode.calbox.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/egovframework/mbl/com/datepicker/jqm-datebox.mode.datebox.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/egovframework/mbl/com/datepicker/jqm-datebox.mode.flipbox.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/egovframework/mbl/com/datepicker/jquery.mobile.datebox.i18n.ko.utf8.js"></script>
+		
 		<script type="text/javaScript" language="javascript">
 			<!--
 			
@@ -54,8 +63,6 @@
 			}
 
 			function showList_page(pageIndex) {
-				debugger;
-
 				if(document.searchVO.pageIndex.value == pageIndex) {
 					return;
 				} 
@@ -76,6 +83,12 @@
 				$('#detailForm').submit();	
 				
 			}
+			function fn_regist_page() {
+				var pageIndex = document.searchVO.pageIndex.value;
+				document.searchVO.pageIndex.value = pageIndex == 0 ? 1 : pageIndex;
+				document.searchVO.action = "${pageContext.request.contextPath}/edm/edm/EdmDtlsRegistView.mdo";					         
+				document.searchVO.submit();
+			}
       		
         	-->
 		</script>
@@ -91,7 +104,8 @@
 			<div data-role="header">
 				<a href="${pageContext.request.contextPath}/index.jsp" data-icon="home" rel="external">홈</a>
 			    <h1>지출 목록조회</h1>
-			    <a href="${pageContext.request.contextPath}/edm/edm/EdmDtlsRegistView.mdo" data-icon="plus">등록</a>
+<%-- 			    <a href="${pageContext.request.contextPath}/edm/edm/EdmDtlsRegistView.mdo" data-icon="plus">등록</a> --%>
+			    <a href="javascript:fn_regist_page()" data-icon="plus">등록</a>
 			</div>
 			<!-- header end -->
 			

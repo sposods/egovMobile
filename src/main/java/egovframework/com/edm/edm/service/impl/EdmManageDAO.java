@@ -86,17 +86,6 @@ public class EdmManageDAO extends EgovComAbstractDAO {
 	}
 
 	/**
-	 * 작성비밀번호를 확인한다.
-	 * @param vo
-	 * @return 글 총 갯수
-	 */
-	public int selectEdmPasswordConfirmCnt(EdmManageVO vo) {
-
-		return (Integer) selectOne("EdmManageDAO.selectEdmPasswordConfirmCnt", vo);
-
-	}
-
-	/**
 	 * 지출관리 글을 수정한다.
 	 * @param vo
 	 * @exception Exception
@@ -115,52 +104,6 @@ public class EdmManageDAO extends EgovComAbstractDAO {
 	public void deleteEdmDtls(EdmManageVO vo) throws Exception {
 
 		delete("EdmManageDAO.deleteEdmDtls", vo);
-
-	}
-
-	/**
-	 * 상담답변 글 목록에 대한 상세내용을 조회한다.
-	 * @param vo
-	 * @return 조회한 글
-	 * @exception Exception
-	 */
-	public EdmManageVO selectEdmAnswerListDetail(EdmManageVO vo) throws Exception {
-
-		return (EdmManageVO) selectOne("EdmManageDAO.selectEdmAnswerListDetail", vo);
-
-	}
-
-	/**
-	 * 상담답변 글 목록을 조회한다.
-	 * @param searchVO
-	 * @return 글 목록
-	 * @exception Exception
-	 */
-	public List<?> selectEdmAnswerList(EdmManageDefaultVO searchVO) throws Exception {
-
-		return list("EdmManageDAO.selectEdmAnswerList", searchVO);
-
-	}
-
-	/**
-	 * 상담답변 글 총 갯수를 조회한다.
-	 * @param searchVO
-	 * @return 글 총 갯수
-	 */
-	public int selectEdmAnswerListTotCnt(EdmManageDefaultVO searchVO) {
-
-		return (Integer) selectOne("EdmManageDAO.selectEdmAnswerListTotCnt", searchVO);
-
-	}
-
-	/**
-	 * 상담답변 글을 수정한다.
-	 * @param vo
-	 * @exception Exception
-	 */
-	public void updateEdmDtlsAnswer(EdmManageVO vo) throws Exception {
-
-		update("EdmManageDAO.updateEdmDtlsAnswer", vo);
 
 	}
 

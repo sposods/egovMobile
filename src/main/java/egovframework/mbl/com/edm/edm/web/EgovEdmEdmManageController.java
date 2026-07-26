@@ -1,6 +1,7 @@
 package egovframework.mbl.com.edm.edm.web;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -10,10 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import egovframework.com.cmm.ComDefaultCodeVO;
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.service.EgovCmmUseService;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.edm.edm.service.EdmManageDefaultVO;
 import egovframework.com.edm.edm.service.EdmManageVO;
@@ -51,6 +56,9 @@ public class EgovEdmEdmManageController {
     @Resource(name="egovMessageSource")
     EgovMessageSource egovMessageSource;
 
+	@Resource(name="EgovCmmUseService")
+	private EgovCmmUseService cmmUseService;
+
     /**
      * 상담내역등록 화면을 출력한다.
      * @param searchVO
@@ -61,7 +69,8 @@ public class EgovEdmEdmManageController {
      */
     @RequestMapping(value="/edm/edm/EdmDtlsRegistView.mdo")
     public String insertEdmDtlsView(@ModelAttribute("searchVO") EdmManageDefaultVO searchVO,
-    		EdmManageVO edmManageVO,
+			@ModelAttribute("edmManageVO") EdmManageVO edmManageVO,
+			@RequestParam Map<?, ?> commandMap,
             ModelMap model)
     throws Exception {
 
@@ -75,7 +84,15 @@ public class EgovEdmEdmManageController {
 
     	model.addAttribute("edmManageVO", edmManageVO);
 
-    	return "egovframework/mbl/com/edm/edm/EgovEdmDtlsRegist";
+     	//공통코드  중요도 조회
+    	ComDefaultCodeVO voComCode = new ComDefaultCodeVO();
+    	voComCode.setCodeId("COM087");
+    	List<?> listComCode = cmmUseService.selectCmmCodeDetail(voComCode);
+    	model.addAttribute("expendCode", listComCode);
+
+		model.addAttribute("searchVO", searchVO);
+    	
+    	return "egovframework/mbl/com/edm/edm/EgovEdmManageDtlsRegist";
 
     }
 
@@ -98,7 +115,13 @@ public class EgovEdmEdmManageController {
 
 		model.addAttribute("edmManageVO", edmManage);
 
-    	return "egovframework/mbl/com/edm/edm/EgovEdmDtlsUpdt";
+     	//공통코드  중요도 조회
+    	ComDefaultCodeVO voComCode = new ComDefaultCodeVO();
+    	voComCode.setCodeId("COM087");
+    	List<?> listComCode = cmmUseService.selectCmmCodeDetail(voComCode);
+    	model.addAttribute("expendCode", listComCode);
+    	
+    	return "egovframework/mbl/com/edm/edm/EgovEdmManageDtlsUpdt";
 
     }
 
@@ -192,7 +215,7 @@ public class EgovEdmEdmManageController {
      * @param searchVO
      * @param edmManageVO
      * @param model
-     * @return "redirect:/edm/edm/EdmListInqire.mdo"
+     * @return "redirect:/edm/edm/EgovEdmManageListInqire.mdo"
      * @throws Exception
      */
     @SuppressWarnings("deprecation")
@@ -200,7 +223,7 @@ public class EgovEdmEdmManageController {
     public String insertEdmDtls(
             @ModelAttribute("searchVO") EdmManageDefaultVO searchVO,
             @ModelAttribute("edmManageVO") EdmManageVO edmManageVO,
-            ModelMap model)
+            ModelMap model, RedirectAttributes redirectAttributes)
             throws Exception {
 
     	ModelAndView modelAndView = new ModelAndView();
@@ -214,8 +237,9 @@ public class EgovEdmEdmManageController {
         edmManageService.insertEdmDtls(edmManageVO);
 
         modelAndView.addObject("searchVO", searchVO);
+    	redirectAttributes.addFlashAttribute("searchVO", searchVO);
 
-        return "redirect:/edm/edm/EdmListInqire.mdo";
+        return "redirect:/edm/edm/EgovEdmManageListInqire.mdo";
     }
 
     /**
@@ -230,7 +254,7 @@ public class EgovEdmEdmManageController {
 	@RequestMapping("/edm/edm/EdmDtlsUpdt.mdo")
     public String updateEdmDtls(@ModelAttribute("searchVO") EdmManageDefaultVO searchVO,
             @ModelAttribute("edmManageVO") EdmManageVO edmManageVO,
-            ModelMap model)
+            ModelMap model,	RedirectAttributes redirectAttributes)
             throws Exception {
 
     	ModelAndView modelAndView = new ModelAndView();
@@ -245,8 +269,10 @@ public class EgovEdmEdmManageController {
     	edmManageService.updateEdmDtls(edmManageVO);
 
         model.addAttribute("edmManageVO", edmManageVO);
+        
+    	redirectAttributes.addFlashAttribute("searchVO", searchVO);
 
-        return "redirect:/edm/edm/EdmListInqire.mdo";
+        return "redirect:/edm/edm/EgovEdmManageListInqire.mdo";
     }
 
     /**
@@ -254,20 +280,23 @@ public class EgovEdmEdmManageController {
      * @param edmManageVO
      * @param searchVO
      * @param model
-     * @return	"redirect:/edm/edm/EdmListInqire.mdo"
+     * @return	"redirect:/edm/edm/EgovEdmManageListInqire.mdo"
      * @throws Exception
      */
     @RequestMapping("/edm/edm/EdmDtlsDelete.mdo")
     public String deleteEdmDtls(
             EdmManageVO edmManageVO,
             @ModelAttribute("searchVO") EdmManageDefaultVO searchVO,
-    		ModelMap model)
+    		ModelMap model,	RedirectAttributes redirectAttributes)
             throws Exception {
 
     	model.addAttribute("searchVO", searchVO);
+    	
     	edmManageService.deleteEdmDtls(edmManageVO);
+    	
+    	redirectAttributes.addFlashAttribute("searchVO", searchVO);
 
-        return "redirect:/edm/edm/EdmListInqire.mdo";
+        return "redirect:/edm/edm/EgovEdmManageListInqire.mdo";
     }
 
 

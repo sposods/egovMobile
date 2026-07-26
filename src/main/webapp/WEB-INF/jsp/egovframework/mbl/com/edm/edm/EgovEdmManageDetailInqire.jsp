@@ -22,7 +22,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<title>지출상세조회 </title>
 		
-       <link rel="stylesheet" href="${pageContext.request.contextPath}/css/egovframework/mbl/cmm/jquery.mobile-1.4.5.css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/egovframework/mbl/cmm/jquery.mobile-1.4.5.css"/>
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/egovframework/mbl/cmm/EgovMobile-1.4.5.css"/>
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/egovframework/mbl/com/uss/ussCommon.css"/>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/egovframework/mbl/cmm/jquery-1.11.2.js"></script>
@@ -34,32 +34,6 @@
 				
         <script type="text/javaScript" language="javascript" defer="defer">
         <!--
-			
-	        function fn_password_confirm(url, msg) { 
-	        
-        		jPassword("비밀번호 입력", "알림", "a", function(writngPassword){
-					if(writngPassword != null) {
-	        			document.detailForm.writngPassword.value = writngPassword;
-						
-						$.getJSON("${pageContext.request.contextPath}/edm/edm/CnsltPasswordConfirm.mdo", $("#edmManageVO").serialize().replace(/%/g,'%25'), function(json){
-							
-							if(json.passwordConfirmAt == "Y") { 
-			
-								document.detailForm.action = url;
-								document.detailForm.submit();
-								
-							}
-							else {
-			
-								jAlert("비밀번호 오류", "알림", "a");
-								
-							}
-							
-						});
-					}
-        		});
-			}
-		
 	        function fn_egov_delete() {
 	
 				jConfirm('삭제하시겠습니까?', '알림', 'a', function(r) {
@@ -67,9 +41,6 @@
 					if(r) {
 						
 						var url = "${pageContext.request.contextPath}/edm/edm/EdmDtlsDelete.mdo";
-						//var msg = "삭제";
-						//fn_password_confirm(url, msg);
-
 						document.detailForm.action = url;
 						document.detailForm.submit();
 
@@ -82,9 +53,6 @@
 			function fn_egov_updt_confirm() {
 
 				var url = "${pageContext.request.contextPath}/edm/edm/EdmDtlsUpdtView.mdo";
-				//var msg = "수정";
-				//fn_password_confirm(url, msg);
-				
 				document.detailForm.action = url;
 				document.detailForm.submit();
 			}

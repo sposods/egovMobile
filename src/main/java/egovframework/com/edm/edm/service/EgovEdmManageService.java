@@ -59,14 +59,6 @@ public interface EgovEdmManageService {
 	 */
     void insertEdmDtls(EdmManageVO vo) throws Exception;
 
-    /**
-	 * 작성비밀번호를 확인한다.
-	 * @param searchVO
-	 * @return 글 총 갯수
-	 * @exception
-	 */
-    int selectEdmPasswordConfirmCnt(EdmManageVO vo);
-
 	/**
 	 * 지출관리 글을 수정한다.
 	 * @param vo
@@ -80,40 +72,6 @@ public interface EgovEdmManageService {
 	 * @exception Exception
 	 */
     void deleteEdmDtls(EdmManageVO vo) throws Exception;
-
-
-    /**
-	 * 상담답변 글을 조회한다.
-	 * @param vo
-	 * @return 조회한 글
-	 * @exception Exception
-	 */
-	EdmManageVO selectEdmAnswerListDetail(EdmManageVO vo) throws Exception;
-
-
-    /**
-	 * 상담답변 글 목록을 조회한다.
-	 * @param searchVO
-	 * @return 글 목록
-	 * @exception Exception
-	 */
-    List<?> selectEdmAnswerList(EdmManageDefaultVO searchVO) throws Exception;
-
-    /**
-	 * 상담답변 글 총 갯수를 조회한다.
-	 * @param searchVO
-	 * @return 글 총 갯수
-	 * @exception
-	 */
-    int selectEdmAnswerListTotCnt(EdmManageDefaultVO searchVO);
-
-	/**
-	 * 상담답변 글을 수정한다.
-	 * @param vo
-	 * @exception Exception
-	 */
-    void updateEdmDtlsAnswer(EdmManageVO vo) throws Exception;
-
 
 
 }
