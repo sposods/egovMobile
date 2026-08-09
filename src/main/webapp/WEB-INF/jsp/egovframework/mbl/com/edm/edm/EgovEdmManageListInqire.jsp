@@ -84,8 +84,7 @@
 				
 			}
 			function fn_regist_page() {
-				var pageIndex = document.searchVO.pageIndex.value;
-				document.searchVO.pageIndex.value = pageIndex == 0 ? 1 : pageIndex;
+			
 				document.searchVO.action = "${pageContext.request.contextPath}/edm/edm/EdmDtlsRegistView.mdo";					         
 				document.searchVO.submit();
 			}
