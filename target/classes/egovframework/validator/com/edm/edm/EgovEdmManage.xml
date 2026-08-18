@@ -35,7 +35,11 @@
 				</var>
 			</field>
 			
+<<<<<<< HEAD
 			<field property="amount" depends="required, maxlength, integer">
+=======
+			<field property="amount" depends="required, maxlength">
+>>>>>>> branch 'master' of https://github.com/sposods/egovMobile
         		<arg0 key="edmManageVO.amount" resource="true"/>
         		<arg1 key="10" resource="true"/>
 				<var>
